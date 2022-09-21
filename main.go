@@ -5,6 +5,9 @@ import (
 	"gyu/control"
 	"gyu/mapper"
 	"gyu/messageparser"
+	customrouter "gyu/route"
+
+	"github.com/gorilla/mux"
 )
 
 const INPUT_FILE_PATH = "./input.csv"
@@ -13,6 +16,8 @@ func main() {
 	control := control.Control{}
 	control.SetMapper(make(mapper.MessageDataMapper))
 	control.SetParser(&messageparser.CSVParser{})
+	router := mux.NewRouter()
+	control.SetRouter(router, &customrouter.MesageRouter_v1{})
 	control.Analyze(INPUT_FILE_PATH)
 	messageCountRankResp := control.ExecMessageCountRankList()
 	for _, v := range messageCountRankResp {
